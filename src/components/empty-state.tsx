@@ -1,0 +1,1 @@
+export function EmptyState({ title, children }: { title: string; children: React.ReactNode }) { return <div className="empty-state"><span>Base em atualização</span><h2>{title}</h2><p>{children}</p></div> }

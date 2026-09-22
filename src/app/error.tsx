@@ -1,0 +1,1 @@
+"use client"; export default function ErrorPage({reset}:{reset:()=>void}){return <main className="system-page"><span>Erro</span><h1>Não foi possível carregar esta página.</h1><button className="button primary" onClick={reset}>Tentar novamente</button></main>}

@@ -1,0 +1,2 @@
+import Link from "next/link";
+export function SiteFooter() { return <footer className="site-footer"><div><strong>Instituto Recicla Mais</strong><p>Projetos que fortalecem a cadeia da reciclagem.</p></div><div className="footer-links"><Link href="/sobre">O Instituto</Link><Link href="/cidades">Atuação</Link><Link href="/faq">Dúvidas</Link><Link href="/transparencia">Transparência</Link><Link href="/admin/login">Área administrativa</Link></div><p>© {new Date().getFullYear()} Instituto Recicla Mais.</p></footer> }

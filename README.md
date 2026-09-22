@@ -1,73 +1,35 @@
-# React + TypeScript + Vite
+# Instituto Recicla Mais
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Site institucional e área administrativa privada do Instituto Recicla Mais.
 
-Currently, two official plugins are available:
+## Arquitetura
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Next.js 16 App Router e TypeScript estrito
+- Supabase Auth com OTP por e-mail
+- Supabase Postgres com RLS para conteúdo público e administração autorizada
+- CSS próprio e fontes institucionais já fornecidas
+- Vitest, Playwright e axe para validação
 
-## React Compiler
+Nenhuma credencial administrativa é enviada ao navegador. O site usa somente a chave pública do Supabase. A autorização administrativa depende da sessão autenticada e de um registro ativo em `authorized_users`, com RLS como limite final.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Ambiente local
 
-## Expanding the ESLint configuration
+1. Copie `.env.example` para `.env.local`.
+2. Preencha a URL e a publishable key do projeto Supabase existente.
+3. Rode `npm install` e `npm run dev`.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Banco de dados
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+A migração proposta está em `supabase/migrations/202609220001_site_rls.sql`. Ela deve ser revisada contra o estado real do projeto antes de ser aplicada. Não cria outro projeto e não altera dados de conteúdo.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Validação
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+npm run check
+npm run build
+npm run test:e2e
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Implantação
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Não há implantação pública configurada ou executada neste repositório.
