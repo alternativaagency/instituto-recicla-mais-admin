@@ -25,6 +25,12 @@ where routine_schema = 'public'
   and routine_name in ('claim_authorized_user', 'is_authorized', 'can_edit_content', 'can_delete_content')
 order by routine_name, grantee;
 
+select indexname, indexdef
+from pg_catalog.pg_indexes
+where schemaname = 'public'
+  and tablename = 'authorized_users'
+order by indexname;
+
 select lower(btrim(email)) as normalized_email, count(*)
 from public.authorized_users
 group by lower(btrim(email))

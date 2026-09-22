@@ -3,9 +3,9 @@
 -- This migration intentionally replaces every policy on the four application tables.
 
 -- Fail closed if duplicate authorization identities already exist.
-create unique index if not exists authorized_users_email_ci_unique
+create unique index authorized_users_email_ci_unique
   on public.authorized_users ((lower(btrim(email))));
-create unique index if not exists authorized_users_user_id_unique
+create unique index authorized_users_user_id_unique
   on public.authorized_users (user_id)
   where user_id is not null;
 
