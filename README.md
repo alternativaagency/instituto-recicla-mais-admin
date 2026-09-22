@@ -20,7 +20,13 @@ Nenhuma credencial administrativa é enviada ao navegador. O site usa somente a 
 
 ## Banco de dados
 
-A migração proposta está em `supabase/migrations/202609220001_site_rls.sql`. Ela deve ser revisada contra o estado real do projeto antes de ser aplicada. Não cria outro projeto e não altera dados de conteúdo.
+1. Execute primeiro o diagnóstico somente leitura em `supabase/preflight.sql` e preserve o resultado.
+2. Confirme tabelas, colunas, políticas, privilégios e possíveis identidades duplicadas.
+3. Só então revise e aplique `supabase/migrations/202609220001_site_rls.sql`.
+
+A migração substitui todas as políticas somente nas quatro tabelas da aplicação, fixa privilégios explícitos, restringe a execução das funções a `authenticated` e impede e-mails ou usuários autorizados duplicados. Ela não cria outro projeto nem altera dados de conteúdo.
+
+Os usuários autorizados precisam existir previamente no Supabase Auth. O envio de OTP usa `shouldCreateUser: false`, portanto um endereço arbitrário não cria uma conta. Após o primeiro OTP válido, `claim_authorized_user` vincula o `auth.uid()` ao registro ativo de mesmo e-mail. Os papéis são: `admin` com CRUD completo, `editor` com criação e edição, e `viewer` somente leitura.
 
 ## Validação
 

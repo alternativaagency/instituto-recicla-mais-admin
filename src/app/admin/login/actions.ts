@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 export type LoginResult={ok:boolean;stage:"email"|"code"|"done";message:string};
 export async function requestOtp(email:string):Promise<LoginResult>{
  const normalized=email.trim().toLowerCase(); if(!normalized.includes("@")) return {ok:false,stage:"email",message:"Informe um e-mail válido."};
- const supabase=await createClient(); const {error}=await supabase.auth.signInWithOtp({email:normalized,options:{shouldCreateUser:true}});
+ const supabase=await createClient(); const {error}=await supabase.auth.signInWithOtp({email:normalized,options:{shouldCreateUser:false}});
  if(error) return {ok:false,stage:"email",message:"Não foi possível enviar o código. Tente novamente."};
  return {ok:true,stage:"code",message:"Código enviado. Verifique sua caixa de entrada."};
 }
