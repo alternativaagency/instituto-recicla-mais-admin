@@ -24,6 +24,7 @@ export type City = {
 export type Faq = { id: number; title: string; answer: string; sort_order: number | null };
 export type TransparencyDocument = { id: number; title: string; category: string; year: number; file_url: string; published_at: string | null };
 export type AuthorizedUser = { id: string; user_id: string | null; email: string; role: string; is_active: boolean; created_at: string | null; updated_at: string | null };
+export type MediaAsset = { id: number; title: string; media_type: "image" | "video"; storage_path: string; page_key: string; alt_text: string | null; caption: string | null; sort_order: number; is_published: boolean; created_at: string | null };
 
 export type Database = {
   public: {
@@ -32,6 +33,7 @@ export type Database = {
       faqs: Table<Faq, Omit<Faq, "id"> & { id?: number }, Partial<Omit<Faq, "id">>>;
       transparency_documents: Table<TransparencyDocument, Omit<TransparencyDocument, "id"> & { id?: number }, Partial<Omit<TransparencyDocument, "id">>>;
       authorized_users: Table<AuthorizedUser>;
+      media_assets: Table<MediaAsset>;
     };
     Views: Record<string, never>;
     Functions: {

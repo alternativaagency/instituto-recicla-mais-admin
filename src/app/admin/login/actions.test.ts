@@ -16,6 +16,7 @@ describe("requestOtp", () => {
   beforeEach(() => {
     mocks.signInWithOtp.mockReset();
     mocks.signInWithOtp.mockResolvedValue({ error: null });
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "http://localhost:3000");
   });
 
   it("never creates an Auth user from an OTP request", async () => {
@@ -24,7 +25,10 @@ describe("requestOtp", () => {
     expect(result.ok).toBe(true);
     expect(mocks.signInWithOtp).toHaveBeenCalledWith({
       email: "authorized@example.com",
-      options: { shouldCreateUser: false },
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo: "http://localhost:3000/auth/confirm",
+      },
     });
   });
 

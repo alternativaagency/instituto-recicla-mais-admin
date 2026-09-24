@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { isPlaceholderEnvironment } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
-import type { City, Faq, TransparencyDocument } from "@/types/database";
+import type { City, Faq, MediaAsset, TransparencyDocument } from "@/types/database";
 
 async function queryOrEmpty<T>(query: () => PromiseLike<{ data: T[] | null; error: unknown }>): Promise<T[]> {
   if (isPlaceholderEnvironment()) return [];
@@ -38,4 +38,36 @@ export const getFaqs = cache(async (): Promise<Faq[]> => {
 export const getDocuments = cache(async (): Promise<TransparencyDocument[]> => {
   const db = await createClient();
   return queryOrEmpty<TransparencyDocument>(() => db.from("transparency_documents").select("*").order("published_at", { ascending: false }));
+});
+
+export const getHomeVideos = cache(async (): Promise<Array<MediaAsset & { url: string }>> => {
+  const db = await createClient();
+  const { data, error } = await db
+    .from("media_assets")
+    .select("*")
+    .eq("page_key", "home")
+    .eq("media_type", "video")
+    .eq("is_published", true)
+    .order("sort_order");
+
+  if (error) {
+    const mediaError = error as {
+      message?: string;
+      code?: string;
+      details?: string | null;
+      hint?: string | null;
+    };
+    console.log(
+      `Supabase media query failed: ${JSON.stringify(
+        error,
+        Object.getOwnPropertyNames(error),
+      )}`,
+    );
+    return [];
+  }
+
+  return (data ?? []).map((asset) => ({
+    ...asset,
+    url: db.storage.from("site-media").getPublicUrl(asset.storage_path).data.publicUrl,
+  }));
 });
